@@ -2,7 +2,19 @@ import { useState } from 'react'
 
 const Button = ({onClick, text}) => {
   return (
-    <button onClick={onClick}>{text}</button>
+    <button onClick={onClick} style={{
+        backgroundColor: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+      }}>{text}</button>
+  )
+}
+
+const Header = ({text}) => {
+  return (
+  <p style={{fontWeight: 'bold', fontSize: '24px'}}>{text}</p>
   )
 }
 
@@ -17,25 +29,38 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
+   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
-  function getRandomInt(min, max) {
+  const getRandomInt = (min, max) => {
   const minCeiled = Math.ceil(min)
   const maxFloored = Math.floor(max)
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
   }
-   
-  const [selected, setSelected] = useState(0)
 
-    const handleRandom = () => {
-    const random = getRandomInt(0, (anecdotes.length))
-    console.log(random)
-    setSelected(random)
+  const handleRandom = () => {
+  const random = getRandomInt(0, (anecdotes.length))
+  setSelected(random)
   }
+
+  const handleVote = () => {
+  const copy = [...votes]
+  copy[selected] += 1
+  setVotes(copy)
+  }
+
+  const indexOfMostVoted = votes.indexOf(Math.max(...votes))
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      <Header text="Anecdote of the day"/>
+      <p style={{margin: '4px 0'}}>{anecdotes[selected]}</p>
+      <p style={{margin: '4px 0'}}>has {votes[selected]} votes</p>
       <Button onClick = {handleRandom} text = "next anecdote"/>
+      <Button onClick = {handleVote} text = "vote" />
+      <Header text="Anecdote with most votes"/>
+      <p style={{margin: '4px 0'}}>{anecdotes[indexOfMostVoted]}</p>
+      <p style={{margin: '4px 0'}}>has {votes[indexOfMostVoted]} votes</p>
     </div>
   )
 }
