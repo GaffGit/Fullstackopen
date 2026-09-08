@@ -12,9 +12,25 @@ const Button = ({onClick, text}) => {
   )
 }
 
-const Statistic = ({total, text}) => 
-  { return (
+const Statistic = ({total, text}) => { 
+  return (
   <p>{text} {total}</p> 
+  )
+}
+
+const Statistics = ({statistics}) => {
+  const average = (statistics[0].total - statistics[2].total)/statistics[3].total
+  const positive = statistics[0].total/statistics[3].total
+
+  return (
+      <div>
+    <Statistic text={statistics[0].text} total={statistics[0].total}/>
+    <Statistic text={statistics[1].text} total={statistics[1].total}/>
+    <Statistic text={statistics[2].text} total={statistics[2].total}/>
+    <Statistic text={statistics[3].text} total={statistics[3].total}/>
+    <Statistic text="average" total={average}/>
+    <Statistic text="positive" total= {positive + ' %'}/>
+    </div>
   )
 }
 
@@ -25,9 +41,24 @@ const App = () => {
   const [bad, setBad] = useState(0)
   const [all, setAll] = useState(0)
 
-  const goodReview = "Good"
-  const neutralReview = "Neutral"
-  const badReview = "Bad"
+  const statistics = [
+    {
+      text: 'good',
+      total: good
+    },
+    {
+      text: 'neutral',
+      total: neutral
+    },
+        {
+      text: 'bad',
+      total: bad
+    },
+    {
+      text: 'all',
+      total: all
+    },
+  ]
 
   const handleGoodClick = () => {
   const updatedGoodClick = good + 1
@@ -53,16 +84,11 @@ const App = () => {
   return (
     <div>
       <Header text= "Give Feedback"/>
-      <Button onClick={handleGoodClick} text={goodReview}/>
-      <Button onClick={handleNeutralClick} text={neutralReview}/>
-      <Button onClick={handleBadClick} text={badReview}/>
+      <Button onClick={handleGoodClick} text={statistics[0].text}/>
+      <Button onClick={handleNeutralClick} text={statistics[1].text}/>
+      <Button onClick={handleBadClick} text={statistics[2].text}/>
       <Header text="statistics"/>
-      <Statistic text={goodReview} total={good}/>
-      <Statistic text={neutralReview} total={neutral}/>
-      <Statistic text={badReview} total={bad}/>
-      <Statistic text="all" total={all}/>
-      <Statistic text="average" total={(good - bad)/all}/>
-      <Statistic text="positive" total={good/all + " %"}/>
+      <Statistics statistics={statistics}/>
     </div>
   )
 }
