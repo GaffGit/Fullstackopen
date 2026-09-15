@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Header = ({text}) => {
   return (
@@ -50,6 +51,16 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+
+  const hook = () => {
+    axios
+    .get('http://localhost:3001/persons')
+    .then(response => {
+      setPersons(response.data)
+    })
+  }
+
+  useEffect(hook, [])
 
   const add = (event) => {
     event.preventDefault()
